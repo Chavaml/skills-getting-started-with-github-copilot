@@ -1,3 +1,10 @@
+// Function to escape HTML to prevent XSS
+function escapeHTML(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
   const activitySelect = document.getElementById("activity");
@@ -22,13 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Create participants list
         const participantsList = details.participants.length
-          ? `<ul>${details.participants.map(participant => `<li>${participant}</li>`).join("")}</ul>`
+          ? `<ul>${details.participants.map(participant => `<li>${escapeHTML(participant)}</li>`).join("")}</ul>`
           : "<p class='no-participants'>No participants yet.</p>";
 
         activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
+          <h4>${escapeHTML(name)}</h4>
+          <p>${escapeHTML(details.description)}</p>
+          <p><strong>Schedule:</strong> ${escapeHTML(details.schedule)}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
           <div class="participants">
             <strong>Participants:</strong>
